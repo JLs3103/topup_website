@@ -1,5 +1,4 @@
 <x-store-layout>
-    <!-- Auto-scrolling Banner -->
     <div class="w-full bg-indigo-600 overflow-hidden py-2 relative shadow-md">
         <div class="whitespace-nowrap animate-marquee flex items-center space-x-12 text-white font-semibold text-sm tracking-wide">
             <span>🔥 PROMO TOPUP MLBB DISKON 20% HARI INI!</span>
@@ -12,11 +11,9 @@
         </div>
     </div>
 
-    <!-- Main Hero Banner -->
     <div class="w-full px-4 sm:px-6 lg:px-8 mt-6">
         <div class="w-full h-48 md:h-72 bg-gradient-to-tr from-purple-800 via-indigo-700 to-blue-600 rounded-3xl shadow-xl flex items-center justify-center relative overflow-hidden group">
             <div class="absolute inset-0 bg-black opacity-20 group-hover:opacity-10 transition duration-500"></div>
-            <!-- Decorative circles -->
             <div class="absolute top-0 left-0 w-64 h-64 bg-white opacity-5 rounded-full mix-blend-overlay filter blur-xl transform -translate-x-1/2 -translate-y-1/2"></div>
             <div class="absolute bottom-0 right-0 w-96 h-96 bg-pink-500 opacity-20 rounded-full mix-blend-overlay filter blur-3xl transform translate-x-1/3 translate-y-1/3"></div>
             
@@ -27,7 +24,6 @@
         </div>
     </div>
 
-    <!-- Game List Section -->
     <div class="w-full px-4 sm:px-6 lg:px-8 mt-12 mb-16">
         <div class="flex items-center space-x-3 mb-8 border-b border-gray-700 pb-4">
             <div class="p-2 bg-indigo-500/20 rounded-lg">
@@ -38,37 +34,57 @@
             <h2 class="text-2xl font-bold text-white tracking-wide">Paling Populer</h2>
         </div>
 
-        <!-- 5 Columns Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 md:gap-8">
-            @php
-                $games = [
-                    ['name' => 'Mobile Legends', 'dev' => 'Moonton', 'img' => 'https://via.placeholder.com/250/1e3a8a/ffffff?text=MLBB'],
-                    ['name' => 'Free Fire', 'dev' => 'Garena', 'img' => 'https://via.placeholder.com/250/b91c1c/ffffff?text=Free+Fire'],
-                    ['name' => 'PUBG Mobile', 'dev' => 'Tencent', 'img' => 'https://via.placeholder.com/250/4b5563/ffffff?text=PUBGM'],
-                    ['name' => 'Genshin Impact', 'dev' => 'HoYoverse', 'img' => 'https://via.placeholder.com/250/3b82f6/ffffff?text=Genshin'],
-                    ['name' => 'Valorant', 'dev' => 'Riot Games', 'img' => 'https://via.placeholder.com/250/dc2626/ffffff?text=Valorant'],
-                    ['name' => 'Call of Duty: M', 'dev' => 'Garena', 'img' => 'https://via.placeholder.com/250/111827/ffffff?text=CODM'],
-                    ['name' => 'Roblox', 'dev' => 'Roblox Corp', 'img' => 'https://via.placeholder.com/250/6b7280/ffffff?text=Roblox'],
-                ];
-            @endphp
+        @php
+            $games = [
+                ['name' => 'Mobile Legends', 'dev' => 'Moonton',     'img' => asset('images/mobile_legends.jpg')],
+                ['name' => 'Free Fire',       'dev' => 'Garena',      'img' => asset('images/free_fire.png')],
+                ['name' => 'PUBG Mobile',     'dev' => 'Tencent',     'img' => asset('images/pubg_mobile.png')],
+                ['name' => 'Genshin Impact',  'dev' => 'HoYoverse',   'img' => asset('images/genshin_impact.png')],
+                ['name' => 'Valorant',        'dev' => 'Riot Games',  'img' => asset('images/valorant.png')],
+                ['name' => 'Call of Duty: M', 'dev' => 'Garena',      'img' => asset('images/call_of_duty_mobile.jpg')],
+                ['name' => 'Roblox',          'dev' => 'Roblox Corp', 'img' => asset('images/roblox.jpg')],
+            ];
+        @endphp
 
-            @foreach($games as $game)
-                <a href="#" class="group block outline-none">
-                    <div class="bg-gray-800 rounded-2xl p-4 shadow-lg hover:shadow-indigo-500/20 transition-all duration-300 border border-gray-700 hover:border-indigo-500 transform hover:-translate-y-2 h-full flex flex-col">
-                        <!-- Image Container with Aspect Ratio (Square) -->
-                        <div class="w-full relative pt-[100%] rounded-xl overflow-hidden mb-4 shadow-inner">
-                            <img src="{{ $game['img'] }}" alt="{{ $game['name'] }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-in-out">
-                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-0 group-hover:opacity-60 transition duration-300"></div>
+        <div x-data>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 md:gap-8">
+                @foreach($games as $game)
+                    <a
+                        href="#"
+                        class="group block outline-none"
+                        x-show="'{{ strtolower($game['name']) }}'.includes($store.app.searchQuery.toLowerCase().trim())"
+                        x-transition:leave="transition ease-in duration-100"
+                        x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0"
+                    >
+                        <div class="bg-gray-800 rounded-2xl p-4 shadow-lg hover:shadow-indigo-500/20 transition-all duration-300 border border-gray-700 hover:border-indigo-500 transform hover:-translate-y-2 h-full flex flex-col">
+                            <div class="w-full relative pt-[100%] rounded-xl overflow-hidden mb-4 shadow-inner">
+                                <img src="{{ $game['img'] }}" alt="{{ $game['name'] }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-in-out">
+                                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-0 group-hover:opacity-60 transition duration-300"></div>
+                            </div>
+
+                            <div class="text-left mt-auto">
+                                <h3 class="text-base sm:text-lg font-bold text-gray-100 group-hover:text-indigo-400 transition-colors duration-200 leading-tight mb-1">{{ $game['name'] }}</h3>
+                                <p class="text-xs text-gray-400 font-medium">{{ $game['dev'] }}</p>
+                            </div>
                         </div>
-                        
-                        <!-- Title & Subtitle -->
-                        <div class="text-left mt-auto">
-                            <h3 class="text-base sm:text-lg font-bold text-gray-100 group-hover:text-indigo-400 transition-colors duration-200 leading-tight mb-1">{{ $game['name'] }}</h3>
-                            <p class="text-xs text-gray-400 font-medium">{{ $game['dev'] }}</p>
-                        </div>
-                    </div>
-                </a>
-            @endforeach
+                    </a>
+                @endforeach
+            </div>
+
+            <div
+                x-show="{{ collect($games)->map(fn($g) => "'".strtolower($g['name'])."'.includes(\$store.app.searchQuery.toLowerCase().trim())")->join(' || ') }} ? false : true"
+                class="col-span-full flex flex-col items-center py-16 text-gray-500"
+                style="display:none;"
+            >
+                <svg class="h-12 w-12 mb-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <p class="text-base font-medium">Game tidak ditemukan</p>
+                <p class="text-sm mt-1">Coba kata kunci lain</p>
+            </div>
+
         </div>
     </div>
 </x-store-layout>
