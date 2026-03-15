@@ -88,27 +88,19 @@
                 <p class="px-3 pt-4 pb-1 text-xs font-semibold text-gray-500 uppercase tracking-widest">Kategori Game</p>
 
                 @php
-                    $sidebarGames = [
-                        ['name' => 'Mobile Legends', 'img' => 'mobile_legends.jpg'],
-                        ['name' => 'Free Fire',       'img' => 'free_fire.png'],
-                        ['name' => 'PUBG Mobile',     'img' => 'pubg_mobile.png'],
-                        ['name' => 'Genshin Impact',  'img' => 'genshin_impact.png'],
-                        ['name' => 'Valorant',        'img' => 'valorant.png'],
-                        ['name' => 'Call of Duty: M', 'img' => 'call_of_duty_mobile.jpg'],
-                        ['name' => 'Roblox',          'img' => 'roblox.jpg'],
-                    ];
+                    $sidebarGames = collect(config('topup_games.games', []))->values();
                 @endphp
 
                 @foreach($sidebarGames as $sg)
-                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-indigo-500/20 hover:text-indigo-300 transition group">
-                    <img src="{{ asset('images/' . $sg['img']) }}" class="h-6 w-6 rounded object-cover shrink-0" alt="{{ $sg['name'] }}">
+                <a href="{{ route('games.show', $sg['slug']) }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-indigo-500/20 hover:text-indigo-300 transition group">
+                    <img src="{{ asset($sg['image']) }}" class="h-6 w-6 rounded object-cover shrink-0" alt="{{ $sg['name'] }}">
                     <span class="text-sm">{{ $sg['name'] }}</span>
                 </a>
                 @endforeach
 
                 <div class="border-t border-gray-700 my-3"></div>
 
-                <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-200 hover:bg-indigo-500/20 hover:text-indigo-300 transition group">
+                <a href="{{ route('orders.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-200 hover:bg-indigo-500/20 hover:text-indigo-300 transition group">
                     <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                     </svg>

@@ -35,15 +35,16 @@
         </div>
 
         @php
-            $games = [
-                ['name' => 'Mobile Legends', 'dev' => 'Moonton',     'img' => asset('images/mobile_legends.jpg')],
-                ['name' => 'Free Fire',       'dev' => 'Garena',      'img' => asset('images/free_fire.png')],
-                ['name' => 'PUBG Mobile',     'dev' => 'Tencent',     'img' => asset('images/pubg_mobile.png')],
-                ['name' => 'Genshin Impact',  'dev' => 'HoYoverse',   'img' => asset('images/genshin_impact.png')],
-                ['name' => 'Valorant',        'dev' => 'Riot Games',  'img' => asset('images/valorant.png')],
-                ['name' => 'Call of Duty: M', 'dev' => 'Garena',      'img' => asset('images/call_of_duty_mobile.jpg')],
-                ['name' => 'Roblox',          'dev' => 'Roblox Corp', 'img' => asset('images/roblox.jpg')],
-            ];
+            $games = collect(config('topup_games.games', []))
+                ->values()
+                ->map(function (array $game): array {
+                    return [
+                        'slug' => $game['slug'],
+                        'name' => $game['name'],
+                        'dev' => $game['developer'],
+                        'img' => asset($game['image']),
+                    ];
+                });
         @endphp
 
         <div x-data>
@@ -51,7 +52,7 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 md:gap-8">
                 @foreach($games as $game)
                     <a
-                        href="#"
+                        href="{{ route('games.show', $game['slug']) }}"
                         class="group block outline-none"
                         x-show="'{{ strtolower($game['name']) }}'.includes($store.app.searchQuery.toLowerCase().trim())"
                         x-transition:leave="transition ease-in duration-100"
@@ -74,7 +75,7 @@
             </div>
 
             <div
-                x-show="{{ collect($games)->map(fn($g) => "'".strtolower($g['name'])."'.includes(\$store.app.searchQuery.toLowerCase().trim())")->join(' || ') }} ? false : true"
+                x-show="{{ $games->map(fn($g) => "'".strtolower($g['name'])."'.includes(\$store.app.searchQuery.toLowerCase().trim())")->join(' || ') }} ? false : true"
                 class="col-span-full flex flex-col items-center py-16 text-gray-500"
                 style="display:none;"
             >
