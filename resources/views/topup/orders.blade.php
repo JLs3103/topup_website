@@ -71,6 +71,9 @@
                         <thead class="text-gray-400 border-b border-gray-700">
                             <tr>
                                 <th class="py-3 pr-4">Kode</th>
+                                @if ($isAdminView)
+                                    <th class="py-3 pr-4">User</th>
+                                @endif
                                 <th class="py-3 pr-4">Game</th>
                                 <th class="py-3 pr-4">Nominal</th>
                                 <th class="py-3 pr-4">Pembayaran</th>
@@ -85,6 +88,12 @@
                                     <td class="py-3 pr-4 font-medium">
                                         <a href="{{ route('orders.show', $order) }}" class="text-indigo-300 hover:text-indigo-200 underline">{{ $order->order_code }}</a>
                                     </td>
+                                    @if ($isAdminView)
+                                        <td class="py-3 pr-4">
+                                            <div class="font-medium">{{ $order->user?->name ?? '-' }}</div>
+                                            <div class="text-xs text-gray-400">{{ $order->user?->email ?? '-' }}</div>
+                                        </td>
+                                    @endif
                                     <td class="py-3 pr-4">{{ $order->game_name }}</td>
                                     <td class="py-3 pr-4">
                                         <div>{{ $order->package_name }}</div>

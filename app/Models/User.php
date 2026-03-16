@@ -21,6 +21,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'role',
     ];
 
     /**
@@ -47,8 +48,19 @@ class User extends Authenticatable
         ];
     }
 
+    public function hasRole(string $role): bool
+    {
+        return strtolower((string) $this->role) === strtolower($role);
+    }
+
     public function isAdmin(): bool
     {
-        return (bool) $this->is_admin || $this->id === 1;
+        // Backward compatible while migrating from is_admin to role.
+        return $this->hasRole('admin') || (bool) $this->is_admin || $this->id === 1;
+    }
+
+    public function isUser(): bool
+    {
+        return $this->hasRole('user');
     }
 }

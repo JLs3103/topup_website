@@ -89,12 +89,24 @@ class TopupController extends Controller
 
     public function orderHistory(Request $request)
     {
+        $user = Auth::user();
+
+        if (! $user instanceof User) {
+            abort(403);
+        }
+
+        $isAdmin = $user->isAdmin();
+
         $validated = $request->validate([
             'status' => ['nullable', Rule::in(['pending', 'paid', 'success', 'failed', 'canceled'])],
             'q' => ['nullable', 'string', 'max:50'],
         ]);
 
-        $query = TopupOrder::query()->where('user_id', Auth::id());
+        $query = TopupOrder::query()->with('user:id,name,email');
+
+        if (! $isAdmin) {
+            $query->where('user_id', $user->id);
+        }
 
         if (! empty($validated['status'])) {
             $query->where('status', $validated['status']);
@@ -105,14 +117,24 @@ class TopupController extends Controller
 
             $query->where(function ($innerQuery) use ($keyword): void {
                 $innerQuery->where('order_code', 'like', "%{$keyword}%")
-                    ->orWhere('game_name', 'like', "%{$keyword}%");
+                    ->orWhere('game_name', 'like', "%{$keyword}%")
+                    ->orWhere('player_id', 'like', "%{$keyword}%")
+                    ->orWhereHas('user', function ($userQuery) use ($keyword): void {
+                        $userQuery->where('name', 'like', "%{$keyword}%")
+                            ->orWhere('email', 'like', "%{$keyword}%");
+                    });
             });
         }
 
         $orders = $query->latest()->paginate(10)->withQueryString();
 
-        $statusCounts = TopupOrder::query()
-            ->where('user_id', Auth::id())
+        $statusCountQuery = TopupOrder::query();
+
+        if (! $isAdmin) {
+            $statusCountQuery->where('user_id', $user->id);
+        }
+
+        $statusCounts = $statusCountQuery
             ->selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');
@@ -122,6 +144,7 @@ class TopupController extends Controller
             'statusCounts' => $statusCounts,
             'selectedStatus' => $validated['status'] ?? '',
             'keyword' => $validated['q'] ?? '',
+            'isAdminView' => $isAdmin,
         ]);
     }
 
