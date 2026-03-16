@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 
 class TopupOrder extends Model
@@ -22,11 +23,20 @@ class TopupOrder extends Model
         'payment_method',
         'contact_type',
         'contact_value',
+        'payment_proof_path',
+        'payment_notes',
+        'paid_at',
         'status',
         'metadata',
     ];
 
     protected $casts = [
         'metadata' => 'array',
+        'paid_at' => 'datetime',
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

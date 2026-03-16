@@ -107,19 +107,42 @@
                     <span class="text-sm font-medium">Riwayat Transaksi</span>
                 </a>
 
-                <a href="{{ route('profile') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-200 hover:bg-indigo-500/20 hover:text-indigo-300 transition group">
+                <a href="{{ route('account.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-200 hover:bg-indigo-500/20 hover:text-indigo-300 transition group">
                     <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>
                     <span class="text-sm font-medium">Profil Saya</span>
                 </a>
 
-                <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-200 hover:bg-indigo-500/20 hover:text-indigo-300 transition group">
+                <a href="{{ route('faq.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-200 hover:bg-indigo-500/20 hover:text-indigo-300 transition group">
                     <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <span class="text-sm font-medium">Bantuan & FAQ</span>
                 </a>
+
+                @if (auth()->user()?->isAdmin())
+                    <a href="{{ route('admin.orders.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-200 hover:bg-indigo-500/20 hover:text-indigo-300 transition group">
+                        <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span class="text-sm font-medium">Verifikasi Pembayaran</span>
+                    </a>
+
+                    <a href="{{ route('admin.faqs.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-200 hover:bg-indigo-500/20 hover:text-indigo-300 transition group">
+                        <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m0 0v10m0-10a2 2 0 100 4m0-4a2 2 0 110 4"/>
+                        </svg>
+                        <span class="text-sm font-medium">Admin FAQ</span>
+                    </a>
+
+                    <a href="{{ route('admin.activity-logs.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-200 hover:bg-indigo-500/20 hover:text-indigo-300 transition group">
+                        <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span class="text-sm font-medium">Log Aktivitas Admin</span>
+                    </a>
+                @endif
 
                 <div class="border-t border-gray-700 my-3"></div>
 
